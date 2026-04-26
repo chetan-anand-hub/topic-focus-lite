@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { useLazyTopper } from "@/context/LazyTopperContext";
 import { ContextBar } from "@/components/ContextBar";
+import { BackToParent } from "@/components/BackToParent";
 import { ScopeBuilder } from "@/components/ScopeBuilder";
 import { MistakeIntelligencePanel } from "@/components/MistakeIntelligencePanel";
 import { Button } from "@/components/ui/button";
@@ -85,6 +86,7 @@ export default function WorksheetPage() {
 
   return (
     <div className="space-y-5">
+      <BackToParent />
       <ContextBar
         title="Worksheet"
         subtitle="Build a worksheet for one topic, a topic combination, or a full subject."

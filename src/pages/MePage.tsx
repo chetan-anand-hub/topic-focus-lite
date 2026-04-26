@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useLazyTopper } from "@/context/LazyTopperContext";
 import { ContextBar } from "@/components/ContextBar";
+import { BackToParent } from "@/components/BackToParent";
 import { Button } from "@/components/ui/button";
 import { buildLoginPath, buildPracticePath, buildWorksheetPath, buildTopicPath } from "@/lib/navigation";
 import { Target, ClipboardList, BookOpen, Lock, ArrowRight, TrendingUp, Sparkles } from "lucide-react";
