@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useLazyTopper } from "@/context/LazyTopperContext";
 import { topicBySlug } from "@/lib/topics";
 import { buildPracticePath, buildWorksheetPath, buildTopicPath, buildLoginPath, buildCheckPath } from "@/lib/navigation";
@@ -14,6 +14,8 @@ interface TopicActionsProps {
 export function TopicActions({ topicSlug, source }: TopicActionsProps) {
   const { auth, setActionSource, setSubject, setStream, setTopicSlug } = useLazyTopper();
   const navigate = useNavigate();
+  const location = useLocation();
+  const returnTo = `${location.pathname}${location.search}`;
 
   const t = topicBySlug(topicSlug);
   const topicSubject = t?.subject ?? "Maths";
@@ -26,7 +28,7 @@ export function TopicActions({ topicSlug, source }: TopicActionsProps) {
       setTopicSlug(t.slug);
     }
     setActionSource(source);
-    navigate(buildTopicPath(topicSlug, source));
+    navigate(buildTopicPath(topicSlug, source, returnTo));
   };
 
   const handle = () => setActionSource(source);
