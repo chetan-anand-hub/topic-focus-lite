@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useLazyTopper } from "@/context/LazyTopperContext";
 import { ContextBar } from "@/components/ContextBar";
+import { BackToParent } from "@/components/BackToParent";
 import { Button } from "@/components/ui/button";
 import { buildLoginPath, buildPracticePath, buildWorksheetPath, buildTopicPath } from "@/lib/navigation";
 import { Target, ClipboardList, BookOpen, Lock, ArrowRight, TrendingUp, Sparkles } from "lucide-react";
@@ -87,14 +88,24 @@ export default function MePage() {
     return (
       <div className="space-y-5">
         <ContextBar title="Me / Progress" subtitle="Your saved attempts, weak areas and next actions." compact />
-        <section className="lt-card p-6 max-w-2xl space-y-4">
-          <div className="flex items-center gap-2"><Lock className="h-4 w-4 text-muted-foreground" /><h3 className="font-display text-lg font-semibold">Progress needs saved attempts</h3></div>
-          <p className="text-sm text-muted-foreground">Start a free trial to save attempts and unlock your personal dashboard.</p>
-          <Button asChild><Link to={buildLoginPath({ reason: "open-progress", redirect: "/app/me" })}>Start free trial <ArrowRight className="h-3.5 w-3.5" /></Link></Button>
-          <div className="grid sm:grid-cols-3 gap-3 pt-3 opacity-60">
-            <div className="lt-card p-4"><TrendingUp className="h-4 w-4 text-accent mb-2" /><div className="text-xs text-muted-foreground">Score trend</div><div className="font-display text-2xl font-semibold mt-1">—</div></div>
-            <div className="lt-card p-4"><Sparkles className="h-4 w-4 text-accent mb-2" /><div className="text-xs text-muted-foreground">Mistake mix</div><div className="font-display text-2xl font-semibold mt-1">—</div></div>
-            <div className="lt-card p-4"><Target className="h-4 w-4 text-accent mb-2" /><div className="text-xs text-muted-foreground">Weak areas</div><div className="font-display text-2xl font-semibold mt-1">—</div></div>
+        <section className="lt-card p-6 space-y-5">
+          <div className="flex items-center gap-2">
+            <Lock className="h-4 w-4 text-muted-foreground" />
+            <h3 className="font-display text-lg font-semibold">Progress needs saved attempts</h3>
+          </div>
+          <p className="text-sm text-muted-foreground max-w-xl">Start a free trial to save attempts and unlock your personal dashboard.</p>
+          <div>
+            <Button asChild>
+              <Link to={buildLoginPath({ reason: "open-progress", redirect: "/app/me" })}>
+                Start free trial <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </Button>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-4 pt-2">
+            <DashboardSkeleton title="Score trend" icon={<TrendingUp className="h-4 w-4 text-accent" />} variant="line" />
+            <DashboardSkeleton title="Mistake mix" icon={<Sparkles className="h-4 w-4 text-accent" />} variant="pie" />
+            <DashboardSkeleton title="Marks lost by topic" icon={<Target className="h-4 w-4 text-accent" />} variant="bars" />
           </div>
         </section>
       </div>
@@ -103,6 +114,7 @@ export default function MePage() {
 
   return (
     <div className="space-y-5">
+      <BackToParent />
       <ContextBar
         title="Me / Progress"
         subtitle={hasAttempts ? "Based on your saved attempts." : "Save an attempt to start filling your dashboard."}
@@ -111,17 +123,20 @@ export default function MePage() {
       />
 
       {!hasAttempts ? (
-        <section className="lt-card p-6 space-y-4">
-          <h3 className="font-display text-lg font-semibold">Your dashboard is waiting for your first attempt</h3>
-          <p className="text-sm text-muted-foreground">Grade an answer in Check &amp; Improve, or save a practice/mock attempt — your charts will appear here automatically.</p>
+        <section className="lt-card p-6 space-y-5">
+          <div>
+            <h3 className="font-display text-lg font-semibold">Your dashboard will fill after your first saved attempt.</h3>
+            <p className="text-sm text-muted-foreground mt-1">Grade an answer in Check &amp; Improve, or save a practice/mock attempt — your charts will appear here automatically.</p>
+          </div>
           <div className="flex flex-wrap gap-2">
             <Button asChild><Link to="/app/check"><Sparkles className="h-3.5 w-3.5" /> Grade an answer</Link></Button>
             <Button asChild variant="secondary"><Link to="/app/practice"><Target className="h-3.5 w-3.5" /> Start practice</Link></Button>
+            <Button asChild variant="secondary"><Link to="/app/practice/worksheet"><ClipboardList className="h-3.5 w-3.5" /> Generate worksheet</Link></Button>
           </div>
-          <div className="grid sm:grid-cols-3 gap-3 pt-3">
-            <StatCard label="Average score" value="—" />
-            <StatCard label="Best" value="—" />
-            <StatCard label="Saved attempts" value="0" />
+          <div className="grid lg:grid-cols-3 gap-4 pt-2">
+            <DashboardSkeleton title="Score trend" icon={<TrendingUp className="h-4 w-4 text-accent" />} variant="line" />
+            <DashboardSkeleton title="Mistake mix" icon={<Sparkles className="h-4 w-4 text-accent" />} variant="pie" />
+            <DashboardSkeleton title="Marks lost by topic" icon={<Target className="h-4 w-4 text-accent" />} variant="bars" />
           </div>
         </section>
       ) : (
@@ -236,7 +251,7 @@ export default function MePage() {
                   </Link>
                 </Button>
                 <Button asChild size="sm" variant="ghost">
-                  <Link to={buildTopicPath(mistakeInsight.topicSlug, "me")}>
+                  <Link to={buildTopicPath(mistakeInsight.topicSlug, "me", "/app/me")}>
                     <BookOpen className="h-3.5 w-3.5" /> Open Topic Hub
                   </Link>
                 </Button>
@@ -261,7 +276,7 @@ export default function MePage() {
                         <div className="font-display text-lg font-semibold">{a.score}/{a.outOf}</div>
                         <div className="text-[10px] text-muted-foreground">{pct}%</div>
                       </div>
-                      <Button asChild size="sm" variant="ghost"><Link to={buildTopicPath(a.topicSlug, "me")}>Open</Link></Button>
+                      <Button asChild size="sm" variant="ghost"><Link to={buildTopicPath(a.topicSlug, "me", "/app/me")}>Open</Link></Button>
                     </div>
                   </article>
                 );
@@ -290,3 +305,62 @@ function StatCard({ label, value, sub }: { label: string; value: string; sub?: s
     </div>
   );
 }
+
+function DashboardSkeleton({
+  title,
+  icon,
+  variant,
+}: {
+  title: string;
+  icon: React.ReactNode;
+  variant: "line" | "pie" | "bars";
+}) {
+  return (
+    <div className="lt-card p-4 space-y-3">
+      <div className="flex items-center gap-2 text-sm font-medium">
+        {icon}
+        <span>{title}</span>
+        <span className="ml-auto text-[10px] uppercase tracking-wider text-muted-foreground">Preview</span>
+      </div>
+      <div className="h-[140px] rounded-md bg-muted/40 border border-dashed border-border relative overflow-hidden">
+        {variant === "line" && (
+          <svg viewBox="0 0 200 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
+            <polyline
+              points="0,80 30,60 60,68 90,40 120,52 150,28 180,36 200,20"
+              fill="none"
+              stroke="hsl(var(--accent) / 0.55)"
+              strokeWidth="2"
+              strokeDasharray="3 3"
+            />
+            <line x1="0" y1="50" x2="200" y2="50" stroke="hsl(var(--border))" strokeDasharray="2 4" />
+          </svg>
+        )}
+        {variant === "pie" && (
+          <div className="absolute inset-0 grid place-items-center">
+            <div
+              className="h-[88px] w-[88px] rounded-full border-[10px] border-dashed"
+              style={{
+                borderColor: "hsl(var(--accent) / 0.45)",
+                background:
+                  "conic-gradient(hsl(var(--accent) / 0.18) 0 35%, hsl(var(--primary) / 0.18) 35% 65%, hsl(var(--muted)) 65% 100%)",
+              }}
+            />
+          </div>
+        )}
+        {variant === "bars" && (
+          <div className="absolute inset-x-3 bottom-3 flex items-end gap-2 h-[110px]">
+            {[55, 80, 35, 68, 45, 90].map((h, i) => (
+              <div
+                key={i}
+                className="flex-1 rounded-t border border-dashed border-accent/40 bg-accent/15"
+                style={{ height: `${h}%` }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+      <div className="text-[11px] text-muted-foreground">Sample preview — fills with your saved attempts.</div>
+    </div>
+  );
+}
+

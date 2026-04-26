@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useLazyTopper } from "@/context/LazyTopperContext";
 import { ContextBar } from "@/components/ContextBar";
+import { BackToParent } from "@/components/BackToParent";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Lock, Sparkles, Save, ArrowRight, Target, ClipboardList } from "lucide-react";
@@ -51,6 +52,7 @@ export default function CheckPage() {
 
   return (
     <div className="space-y-5">
+      <BackToParent />
       <ContextBar
         title="Check & Improve"
         subtitle="Paste your answer to get feedback and a mistake tag that powers your next steps."

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
 import { ContextBar } from "@/components/ContextBar";
+import { BackToParent } from "@/components/BackToParent";
 import { ScopeBuilder } from "@/components/ScopeBuilder";
 import { MistakeIntelligencePanel } from "@/components/MistakeIntelligencePanel";
 import { PaperBlueprint } from "@/components/PaperBlueprint";
@@ -120,6 +121,7 @@ export default function PracticePage() {
 
   return (
     <div className="space-y-5">
+      <BackToParent />
       <ContextBar
         title="Practice"
         subtitle="Pick a scope, then choose what to do."

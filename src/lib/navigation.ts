@@ -13,6 +13,10 @@ export function buildLoginPath({ reason, redirect }: GateOptions) {
   return `/app/login?${params.toString()}`;
 }
 
+function appendReturnTo(p: URLSearchParams, returnTo?: string) {
+  if (returnTo) p.set("returnTo", returnTo);
+}
+
 export function buildPracticePath(opts: {
   scope?: "topic" | "multi-topic" | "full-subject";
   subject?: "Maths" | "Science";
@@ -22,6 +26,7 @@ export function buildPracticePath(opts: {
   mode?: string;
   source?: ActionSource;
   mistake?: string;
+  returnTo?: string;
 }) {
   const p = new URLSearchParams();
   if (opts.scope) p.set("scope", opts.scope);
@@ -32,6 +37,7 @@ export function buildPracticePath(opts: {
   if (opts.mode) p.set("mode", opts.mode);
   if (opts.source) p.set("source", opts.source);
   if (opts.mistake) p.set("mistake", opts.mistake);
+  appendReturnTo(p, opts.returnTo);
   const qs = p.toString();
   return `/app/practice${qs ? `?${qs}` : ""}`;
 }
@@ -44,6 +50,7 @@ export function buildWorksheetPath(opts: {
   topics?: string[];
   mistakeAware?: boolean;
   source?: ActionSource;
+  returnTo?: string;
 }) {
   const p = new URLSearchParams();
   if (opts.scope) p.set("scope", opts.scope);
@@ -53,14 +60,16 @@ export function buildWorksheetPath(opts: {
   if (opts.topics?.length) p.set("topics", opts.topics.join(","));
   if (opts.mistakeAware) p.set("mistakeAware", "1");
   if (opts.source) p.set("source", opts.source);
+  appendReturnTo(p, opts.returnTo);
   const qs = p.toString();
   return `/app/practice/worksheet${qs ? `?${qs}` : ""}`;
 }
 
-export function buildCheckPath(opts: { topic?: string; source?: ActionSource }) {
+export function buildCheckPath(opts: { topic?: string; source?: ActionSource; returnTo?: string }) {
   const p = new URLSearchParams();
   if (opts.topic) p.set("topic", opts.topic);
   if (opts.source) p.set("source", opts.source);
+  appendReturnTo(p, opts.returnTo);
   const qs = p.toString();
   return `/app/check${qs ? `?${qs}` : ""}`;
 }
@@ -68,7 +77,10 @@ export function buildCheckPath(opts: { topic?: string; source?: ActionSource }) 
 /**
  * Topic Hub navigation must always go to /app/topic/:slug — never to /app/practice.
  */
-export function buildTopicPath(slug: string, source?: ActionSource) {
-  const qs = source ? `?source=${source}` : "";
-  return `/app/topic/${slug}${qs}`;
+export function buildTopicPath(slug: string, source?: ActionSource, returnTo?: string) {
+  const p = new URLSearchParams();
+  if (source) p.set("source", source);
+  appendReturnTo(p, returnTo);
+  const qs = p.toString();
+  return `/app/topic/${slug}${qs ? `?${qs}` : ""}`;
 }
