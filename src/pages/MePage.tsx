@@ -251,7 +251,7 @@ export default function MePage() {
                   </Link>
                 </Button>
                 <Button asChild size="sm" variant="ghost">
-                  <Link to={buildTopicPath(mistakeInsight.topicSlug, "me")}>
+                  <Link to={buildTopicPath(mistakeInsight.topicSlug, "me", "/app/me")}>
                     <BookOpen className="h-3.5 w-3.5" /> Open Topic Hub
                   </Link>
                 </Button>
@@ -276,7 +276,7 @@ export default function MePage() {
                         <div className="font-display text-lg font-semibold">{a.score}/{a.outOf}</div>
                         <div className="text-[10px] text-muted-foreground">{pct}%</div>
                       </div>
-                      <Button asChild size="sm" variant="ghost"><Link to={buildTopicPath(a.topicSlug, "me")}>Open</Link></Button>
+                      <Button asChild size="sm" variant="ghost"><Link to={buildTopicPath(a.topicSlug, "me", "/app/me")}>Open</Link></Button>
                     </div>
                   </article>
                 );
