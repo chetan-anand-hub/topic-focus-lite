@@ -88,14 +88,24 @@ export default function MePage() {
     return (
       <div className="space-y-5">
         <ContextBar title="Me / Progress" subtitle="Your saved attempts, weak areas and next actions." compact />
-        <section className="lt-card p-6 max-w-2xl space-y-4">
-          <div className="flex items-center gap-2"><Lock className="h-4 w-4 text-muted-foreground" /><h3 className="font-display text-lg font-semibold">Progress needs saved attempts</h3></div>
-          <p className="text-sm text-muted-foreground">Start a free trial to save attempts and unlock your personal dashboard.</p>
-          <Button asChild><Link to={buildLoginPath({ reason: "open-progress", redirect: "/app/me" })}>Start free trial <ArrowRight className="h-3.5 w-3.5" /></Link></Button>
-          <div className="grid sm:grid-cols-3 gap-3 pt-3 opacity-60">
-            <div className="lt-card p-4"><TrendingUp className="h-4 w-4 text-accent mb-2" /><div className="text-xs text-muted-foreground">Score trend</div><div className="font-display text-2xl font-semibold mt-1">—</div></div>
-            <div className="lt-card p-4"><Sparkles className="h-4 w-4 text-accent mb-2" /><div className="text-xs text-muted-foreground">Mistake mix</div><div className="font-display text-2xl font-semibold mt-1">—</div></div>
-            <div className="lt-card p-4"><Target className="h-4 w-4 text-accent mb-2" /><div className="text-xs text-muted-foreground">Weak areas</div><div className="font-display text-2xl font-semibold mt-1">—</div></div>
+        <section className="lt-card p-6 space-y-5">
+          <div className="flex items-center gap-2">
+            <Lock className="h-4 w-4 text-muted-foreground" />
+            <h3 className="font-display text-lg font-semibold">Progress needs saved attempts</h3>
+          </div>
+          <p className="text-sm text-muted-foreground max-w-xl">Start a free trial to save attempts and unlock your personal dashboard.</p>
+          <div>
+            <Button asChild>
+              <Link to={buildLoginPath({ reason: "open-progress", redirect: "/app/me" })}>
+                Start free trial <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </Button>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-4 pt-2">
+            <DashboardSkeleton title="Score trend" icon={<TrendingUp className="h-4 w-4 text-accent" />} variant="line" />
+            <DashboardSkeleton title="Mistake mix" icon={<Sparkles className="h-4 w-4 text-accent" />} variant="pie" />
+            <DashboardSkeleton title="Marks lost by topic" icon={<Target className="h-4 w-4 text-accent" />} variant="bars" />
           </div>
         </section>
       </div>
