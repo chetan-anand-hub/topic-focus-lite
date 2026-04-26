@@ -173,7 +173,7 @@ export default function WorksheetPage() {
               <Save className="h-3.5 w-3.5" /> Save worksheet
             </Button>
             <Button asChild variant="ghost">
-              <Link to={buildCheckPath({ topic: topicSlug ?? undefined, source: "worksheet" })}>
+              <Link to={buildCheckPath({ topic: topicSlug ?? undefined, source: "worksheet", returnTo: currentWorksheetPath() })}>
                 Upload your answers →
               </Link>
             </Button>
