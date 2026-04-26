@@ -3,7 +3,18 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
+import { LazyTopperProvider } from "@/context/LazyTopperContext";
+import { AppShell } from "@/components/AppShell";
+import PublicLanding from "@/pages/PublicLanding";
+import HomePage from "@/pages/HomePage";
+import PracticePage from "@/pages/PracticePage";
+import WorksheetPage from "@/pages/WorksheetPage";
+import TrendsPage from "@/pages/TrendsPage";
+import TopicHubPage from "@/pages/TopicHubPage";
+import CheckPage from "@/pages/CheckPage";
+import MePage from "@/pages/MePage";
+import LoginGate from "@/pages/LoginGate";
+import PrototypeNotes from "@/pages/PrototypeNotes";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -13,13 +24,26 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <LazyTopperProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<PublicLanding />} />
+            <Route path="/app/login" element={<LoginGate />} />
+            <Route path="/app" element={<AppShell />}>
+              <Route index element={<HomePage />} />
+              <Route path="practice" element={<PracticePage />} />
+              <Route path="practice/worksheet" element={<WorksheetPage />} />
+              <Route path="trends" element={<TrendsPage />} />
+              <Route path="topic/:slug" element={<TopicHubPage />} />
+              <Route path="check" element={<CheckPage />} />
+              <Route path="me" element={<MePage />} />
+              {/* Hidden implementation handoff route — not visible in student UI. */}
+              <Route path="notes" element={<PrototypeNotes />} />
+            </Route>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </LazyTopperProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
