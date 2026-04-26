@@ -367,7 +367,7 @@ export default function TopicHubPage() {
                     }}
                     onMiniDrill={() => {
                       handle();
-                      navigate(buildPracticePath({ scope: "topic", subject, stream, topic: topic.slug, mode: "worksheet", source }));
+                      navigate(buildWorksheetPath({ scope: "topic", subject, stream, topic: topic.slug, source }));
                     }}
                   />
 
