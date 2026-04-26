@@ -305,3 +305,62 @@ function StatCard({ label, value, sub }: { label: string; value: string; sub?: s
     </div>
   );
 }
+
+function DashboardSkeleton({
+  title,
+  icon,
+  variant,
+}: {
+  title: string;
+  icon: React.ReactNode;
+  variant: "line" | "pie" | "bars";
+}) {
+  return (
+    <div className="lt-card p-4 space-y-3">
+      <div className="flex items-center gap-2 text-sm font-medium">
+        {icon}
+        <span>{title}</span>
+        <span className="ml-auto text-[10px] uppercase tracking-wider text-muted-foreground">Preview</span>
+      </div>
+      <div className="h-[140px] rounded-md bg-muted/40 border border-dashed border-border relative overflow-hidden">
+        {variant === "line" && (
+          <svg viewBox="0 0 200 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
+            <polyline
+              points="0,80 30,60 60,68 90,40 120,52 150,28 180,36 200,20"
+              fill="none"
+              stroke="hsl(var(--accent) / 0.55)"
+              strokeWidth="2"
+              strokeDasharray="3 3"
+            />
+            <line x1="0" y1="50" x2="200" y2="50" stroke="hsl(var(--border))" strokeDasharray="2 4" />
+          </svg>
+        )}
+        {variant === "pie" && (
+          <div className="absolute inset-0 grid place-items-center">
+            <div
+              className="h-[88px] w-[88px] rounded-full border-[10px] border-dashed"
+              style={{
+                borderColor: "hsl(var(--accent) / 0.45)",
+                background:
+                  "conic-gradient(hsl(var(--accent) / 0.18) 0 35%, hsl(var(--primary) / 0.18) 35% 65%, hsl(var(--muted)) 65% 100%)",
+              }}
+            />
+          </div>
+        )}
+        {variant === "bars" && (
+          <div className="absolute inset-x-3 bottom-3 flex items-end gap-2 h-[110px]">
+            {[55, 80, 35, 68, 45, 90].map((h, i) => (
+              <div
+                key={i}
+                className="flex-1 rounded-t border border-dashed border-accent/40 bg-accent/15"
+                style={{ height: `${h}%` }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+      <div className="text-[11px] text-muted-foreground">Sample preview — fills with your saved attempts.</div>
+    </div>
+  );
+}
+
