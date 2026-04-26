@@ -114,6 +114,7 @@ export default function MePage() {
 
   return (
     <div className="space-y-5">
+      <BackToParent />
       <ContextBar
         title="Me / Progress"
         subtitle={hasAttempts ? "Based on your saved attempts." : "Save an attempt to start filling your dashboard."}
@@ -122,17 +123,20 @@ export default function MePage() {
       />
 
       {!hasAttempts ? (
-        <section className="lt-card p-6 space-y-4">
-          <h3 className="font-display text-lg font-semibold">Your dashboard is waiting for your first attempt</h3>
-          <p className="text-sm text-muted-foreground">Grade an answer in Check &amp; Improve, or save a practice/mock attempt — your charts will appear here automatically.</p>
+        <section className="lt-card p-6 space-y-5">
+          <div>
+            <h3 className="font-display text-lg font-semibold">Your dashboard will fill after your first saved attempt.</h3>
+            <p className="text-sm text-muted-foreground mt-1">Grade an answer in Check &amp; Improve, or save a practice/mock attempt — your charts will appear here automatically.</p>
+          </div>
           <div className="flex flex-wrap gap-2">
             <Button asChild><Link to="/app/check"><Sparkles className="h-3.5 w-3.5" /> Grade an answer</Link></Button>
             <Button asChild variant="secondary"><Link to="/app/practice"><Target className="h-3.5 w-3.5" /> Start practice</Link></Button>
+            <Button asChild variant="secondary"><Link to="/app/practice/worksheet"><ClipboardList className="h-3.5 w-3.5" /> Generate worksheet</Link></Button>
           </div>
-          <div className="grid sm:grid-cols-3 gap-3 pt-3">
-            <StatCard label="Average score" value="—" />
-            <StatCard label="Best" value="—" />
-            <StatCard label="Saved attempts" value="0" />
+          <div className="grid lg:grid-cols-3 gap-4 pt-2">
+            <DashboardSkeleton title="Score trend" icon={<TrendingUp className="h-4 w-4 text-accent" />} variant="line" />
+            <DashboardSkeleton title="Mistake mix" icon={<Sparkles className="h-4 w-4 text-accent" />} variant="pie" />
+            <DashboardSkeleton title="Marks lost by topic" icon={<Target className="h-4 w-4 text-accent" />} variant="bars" />
           </div>
         </section>
       ) : (
