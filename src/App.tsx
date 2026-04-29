@@ -1,5 +1,18 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
+import { SLUG_ALIASES } from "@/lib/topics";
+
+function TopicSlugAliasRedirect() {
+  const { slug = "" } = useParams();
+  const loc = useLocation();
+  const canonical = SLUG_ALIASES[slug] ?? slug;
+  return <Navigate to={`/app/topic/${canonical}${loc.search}`} replace />;
+}
+
+function PreserveSearchRedirect({ to }: { to: string }) {
+  const loc = useLocation();
+  return <Navigate to={`${to}${loc.search}`} replace />;
+}
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -39,6 +52,11 @@ const App = () => (
               <Route path="me" element={<MePage />} />
               {/* Hidden implementation handoff route — not visible in student UI. */}
               <Route path="notes" element={<PrototypeNotes />} />
+              {/* Alias routes — preserve query string, redirect to locked paths. */}
+              <Route path="exam-trends" element={<PreserveSearchRedirect to="/app/trends" />} />
+              <Route path="practice-hub" element={<PreserveSearchRedirect to="/app/practice" />} />
+              <Route path="check-improve" element={<PreserveSearchRedirect to="/app/check" />} />
+              <Route path="topic-hub/:slug" element={<TopicSlugAliasRedirect />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
