@@ -52,6 +52,11 @@ const App = () => (
               <Route path="me" element={<MePage />} />
               {/* Hidden implementation handoff route — not visible in student UI. */}
               <Route path="notes" element={<PrototypeNotes />} />
+              {/* Alias routes — preserve query string, redirect to locked paths. */}
+              <Route path="exam-trends" element={<PreserveSearchRedirect to="/app/trends" />} />
+              <Route path="practice-hub" element={<PreserveSearchRedirect to="/app/practice" />} />
+              <Route path="check-improve" element={<PreserveSearchRedirect to="/app/check" />} />
+              <Route path="topic-hub/:slug" element={<TopicSlugAliasRedirect />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
