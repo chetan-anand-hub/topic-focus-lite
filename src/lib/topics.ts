@@ -36,9 +36,26 @@ export const TOPICS: Topic[] = [
   { slug: "our-environment", name: "Our Environment", subject: "Science", stream: "Biology", weight: 4, trendTier: "low", blurb: "Ecosystems, food chains, ozone, waste." },
 ];
 
+// Slug aliases — map external/legacy slugs to the canonical locked slugs.
+export const SLUG_ALIASES: Record<string, string> = {
+  "trigonometry-heights-distances": "trigonometry",
+  "introduction-to-trigonometry": "trigonometry",
+  "some-applications-of-trigonometry": "trigonometry",
+  "acids-bases-salts": "acids-bases-and-salts",
+  "light-reflection-refraction": "light-reflection-and-refraction",
+  "pair-of-linear-equations-in-two-variables": "pair-of-linear-equations",
+  "arithmetic-progressions": "arithmetic-progression",
+};
+
+export function resolveSlug(slug: string | null | undefined): string | undefined {
+  if (!slug) return undefined;
+  return SLUG_ALIASES[slug] ?? slug;
+}
+
 export function topicBySlug(slug: string | null | undefined) {
   if (!slug) return undefined;
-  return TOPICS.find((t) => t.slug === slug);
+  const canonical = SLUG_ALIASES[slug] ?? slug;
+  return TOPICS.find((t) => t.slug === canonical);
 }
 
 export function topicsBySubject(subject: "Maths" | "Science", stream: "All" | "Physics" | "Chemistry" | "Biology" = "All") {
